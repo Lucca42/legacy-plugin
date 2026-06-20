@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/6.0/templateListener.xsd">
+	<import>
+		<!-- Per-board settings on the board ACP form. The dataFields event is emitted in
+		     more than one place, so a shared render guard keeps the fields to one copy. -->
+		<templatelistener name="boardSettings">
+			<environment>admin</environment>
+			<templatename>boardAdd</templatename>
+			<eventname>dataFields</eventname>
+			<templatecode><![CDATA[{if $gwBoardSettingsGuard|isset && $gwBoardSettingsGuard->renderOnce()}{include file='__gwBoardSelfReplyOption'}{/if}]]></templatecode>
+		</templatelistener>
+
+		<!-- Bump button on the thread page. -->
+		<templatelistener name="threadBumpButton">
+			<environment>user</environment>
+			<templatename>contentInteraction</templatename>
+			<eventname>afterButtons</eventname>
+			<templatecode><![CDATA[{if $gwCanBump|isset}{include file='__gwThreadBumpButton'}{/if}]]></templatecode>
+		</templatelistener>
+
+		<!-- Squash + "show previous replies" buttons on the thread page. -->
+		<templatelistener name="threadSquashButtons">
+			<environment>user</environment>
+			<templatename>contentInteraction</templatename>
+			<eventname>afterButtons</eventname>
+			<templatecode><![CDATA[{if $gwSquashThreadID|isset}{include file='__gwThreadSquashButtons'}{/if}]]></templatecode>
+		</templatelistener>
+	</import>
+</data>
