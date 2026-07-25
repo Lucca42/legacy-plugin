@@ -3,14 +3,16 @@
 namespace wcf\system\event\listener;
 
 use wcf\system\exception\UserInputException;
+use wcf\system\gw\BumpSchedule;
 use wcf\system\WCF;
 
 /**
- * Prevents a thread author from replying to their own thread on an enabled board.
+ * Rate-limits a thread author's own replies on an enabled board: the author may post an
+ * update to their thread, but at most once per the board's interval. The reply and the
+ * bump button share that interval, so an author cannot post and then bump on top of it.
  *
  * Hooked on the post action's validation, which covers both the quick reply
- * ("quickReply") and the full reply form ("create"). The reply UI is hidden via a
- * template listener; this is the server-side enforcement.
+ * ("quickReply") and the full reply form ("create").
  *
  * @author    Calin
  * @copyright 2026 Guild Wars Legacy
@@ -20,8 +22,8 @@ final class GwPreventSelfReplyListener implements IParameterizedEventListener
 {
     public function execute($eventObj, $className, $eventName, array &$parameters): void
     {
-        // The rule targets the thread author regardless of rank; a moderator replying to
-        // someone else's thread is not the author and is therefore never affected.
+        // The rule targets the thread author; a member replying to someone else's thread
+        // is not the author and is never affected.
         $userID = WCF::getUser()->userID;
         if (!$userID) {
             return;
@@ -32,10 +34,18 @@ final class GwPreventSelfReplyListener implements IParameterizedEventListener
             return;
         }
 
-        if ($this->isOwnRestrictedThread($threadID, $userID)) {
+        $thread = $this->getRestrictedThread($threadID, $userID);
+        if ($thread === null) {
+            return;
+        }
+
+        $interval = (int)$thread['gwBumpInterval'] ?: 86400;
+        $lastResurface = BumpSchedule::lastResurfaceTime($threadID, $userID, (int)$thread['gwLastBumpTime']);
+        if (TIME_NOW < $lastResurface + $interval) {
             throw new UserInputException(
                 'text',
-                'You cannot reply to your own thread here. Use the "Bump" button to push it back up.'
+                'You can only bump or update your own thread once every ' . BumpSchedule::describeInterval($interval)
+                    . '. Please try again later, or use the "Bump" button.'
             );
         }
     }
@@ -68,10 +78,16 @@ final class GwPreventSelfReplyListener implements IParameterizedEventListener
         return null;
     }
 
-    private function isOwnRestrictedThread(int $threadID, int $userID): bool
+    /**
+     * Returns [gwLastBumpTime, gwBumpInterval] when the thread is on an enabled board and
+     * owned by $userID, otherwise null (the reply is then left untouched).
+     */
+    private function getRestrictedThread(int $threadID, int $userID): ?array
     {
         $sql = "SELECT      thread.userID,
-                            board.gwSelfReplyRestricted
+                            thread.gwLastBumpTime,
+                            board.gwSelfReplyRestricted,
+                            board.gwBumpInterval
                 FROM        wbb1_thread thread
                 INNER JOIN  wbb1_board board ON board.boardID = thread.boardID
                 WHERE       thread.threadID = ?";
@@ -79,11 +95,10 @@ final class GwPreventSelfReplyListener implements IParameterizedEventListener
         $statement->execute([$threadID]);
         $row = $statement->fetchSingleRow();
 
-        if (!$row) {
-            return false;
+        if (!$row || !(int)$row['gwSelfReplyRestricted'] || (int)$row['userID'] !== $userID) {
+            return null;
         }
 
-        return (int)$row['gwSelfReplyRestricted'] === 1
-            && (int)$row['userID'] === $userID;
+        return $row;
     }
 }

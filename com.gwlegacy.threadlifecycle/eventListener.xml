@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/6.0/eventListener.xsd">
+	<import>
+		<!-- Self-close button state on the thread page. -->
+		<eventlistener name="selfCloseDisplay">
+			<eventclassname>wbb\page\ThreadPage</eventclassname>
+			<eventname>assignVariables</eventname>
+			<listenerclassname>wcf\system\event\listener\GwSelfCloseDisplayListener</listenerclassname>
+			<environment>user</environment>
+		</eventlistener>
+
+		<!-- Per-board settings on the board ACP form (read / save / prefill / display). -->
+		<eventlistener name="lifecycleSettingsRead">
+			<eventclassname>wbb\acp\form\BoardAddForm</eventclassname>
+			<eventname>readFormParameters</eventname>
+			<listenerclassname>wcf\system\event\listener\GwLifecycleBoardOptionListener</listenerclassname>
+			<environment>admin</environment>
+			<inherit>1</inherit>
+		</eventlistener>
+		<eventlistener name="lifecycleSettingsSave">
+			<eventclassname>wbb\acp\form\BoardAddForm</eventclassname>
+			<eventname>save</eventname>
+			<listenerclassname>wcf\system\event\listener\GwLifecycleBoardOptionListener</listenerclassname>
+			<environment>admin</environment>
+			<inherit>1</inherit>
+		</eventlistener>
+		<eventlistener name="lifecycleSettingsAssign">
+			<eventclassname>wbb\acp\form\BoardAddForm</eventclassname>
+			<eventname>assignVariables</eventname>
+			<listenerclassname>wcf\system\event\listener\GwLifecycleBoardOptionListener</listenerclassname>
+			<environment>admin</environment>
+			<inherit>1</inherit>
+		</eventlistener>
+		<eventlistener name="lifecycleSettingsReadData">
+			<eventclassname>wbb\acp\form\BoardEditForm</eventclassname>
+			<eventname>readData</eventname>
+			<listenerclassname>wcf\system\event\listener\GwLifecycleBoardOptionListener</listenerclassname>
+			<environment>admin</environment>
+		</eventlistener>
+	</import>
+</data>

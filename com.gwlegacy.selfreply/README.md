@@ -8,13 +8,15 @@ left untouched.
 
 Enabled per board (a checkbox in the board's ACP edit form):
 
-- **No self-reply** — the thread author cannot reply to their own thread. Other members
-  and moderators reply normally. The reply UI is hidden and the action is rejected
-  server-side.
-- **Daily bump** — instead of reply-bumping, the author gets a *Bump thread* button that
-  refreshes the thread's last activity, usable once per a configurable per-board delay
-  (default 24h).
-- **Squash** — the author can hide all current replies in one click (the opening post
+- **Bump rate limit.** A thread author may resurface their own thread only once per a
+  configurable per-board delay (default 24h). This applies to both ways of resurfacing:
+  posting an update reply, or pressing the bump button. Both share the same window, so an
+  author cannot post and then immediately bump on top of it. Replies from other members
+  never count against the author, and other members reply normally.
+- **Bump button.** Instead of posting, the author can press a *Bump thread* button that
+  refreshes the thread's activity without adding a message. It is disabled until the
+  interval has elapsed.
+- **Squash.** The author can hide all current replies in one click (the opening post
   stays visible); only later replies are shown afterwards. Anyone, including guests, can
   reveal the hidden replies with a *Show previous replies* button. Nothing is deleted.
 

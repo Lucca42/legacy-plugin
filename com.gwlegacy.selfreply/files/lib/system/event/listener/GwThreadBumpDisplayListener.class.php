@@ -2,6 +2,7 @@
 
 namespace wcf\system\event\listener;
 
+use wcf\system\gw\BumpSchedule;
 use wcf\system\WCF;
 
 /**
@@ -42,7 +43,7 @@ final class GwThreadBumpDisplayListener implements IParameterizedEventListener
         }
 
         $interval = (int)$board->gwBumpInterval ?: 86400;
-        $reference = \max((int)$thread->gwLastBumpTime, (int)$thread->lastPostTime);
+        $reference = BumpSchedule::lastResurfaceTime((int)$thread->threadID, $userID, (int)$thread->gwLastBumpTime);
         $availableTime = $reference + $interval;
         $canBump = TIME_NOW >= $availableTime;
 

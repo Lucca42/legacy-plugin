@@ -26,7 +26,7 @@
 		});
 	</script>
 {else}
-	<span class="contentInteractionButton button small disabled" title="Already bumped recently — you can bump again later.">
+	<span class="contentInteractionButton button small disabled" title="Already resurfaced recently. You can bump again later.">
 		{icon name='arrow-up'} <span>Bump thread</span>
 	</span>
 {/if}

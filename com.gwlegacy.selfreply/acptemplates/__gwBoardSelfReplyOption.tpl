@@ -4,9 +4,9 @@
 	<dd>
 		<label>
 			<input type="checkbox" name="gwSelfReplyRestricted" value="1"{if $gwSelfReplyRestricted} checked{/if}>
-			No self-reply &amp; daily bump
+			Bump limit &amp; squash
 		</label>
-		<small>On this board the thread author cannot reply to their own thread, but may bump it once per interval.</small>
+		<small>On this board the thread author may resurface their own thread (a reply update or the bump button) only once per the interval below, and can squash old replies.</small>
 	</dd>
 </dl>
 <dl>

@@ -6,6 +6,7 @@ use wcf\data\AbstractDatabaseObjectAction;
 use wcf\system\exception\IllegalLinkException;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\exception\UserInputException;
+use wcf\system\gw\BumpSchedule;
 use wcf\system\WCF;
 
 /**
@@ -43,7 +44,6 @@ final class BumpThreadAction extends AbstractDatabaseObjectAction
         }
 
         $sql = "SELECT      thread.userID,
-                            thread.lastPostTime,
                             thread.gwLastBumpTime,
                             board.gwSelfReplyRestricted,
                             board.gwBumpInterval
@@ -65,9 +65,12 @@ final class BumpThreadAction extends AbstractDatabaseObjectAction
         }
 
         $interval = (int)$row['gwBumpInterval'] ?: 86400;
-        $reference = \max((int)$row['gwLastBumpTime'], (int)$row['lastPostTime']);
+        $reference = BumpSchedule::lastResurfaceTime($threadID, $userID, (int)$row['gwLastBumpTime']);
         if (TIME_NOW < $reference + $interval) {
-            throw new UserInputException('text', 'You can bump this thread again later.');
+            throw new UserInputException(
+                'text',
+                'You can only bump or update your own thread once every ' . BumpSchedule::describeInterval($interval) . '.'
+            );
         }
 
         $this->bumpData = [

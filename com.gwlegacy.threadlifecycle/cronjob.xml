@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/6.0/cronjob.xsd">
+	<import>
+		<cronjob name="com.gwlegacy.threadlifecycle.autoClose">
+			<classname>wcf\system\cronjob\GwAutoCloseCronjob</classname>
+			<description>Closes threads that have been inactive for too long.</description>
+			<expression>17 * * * *</expression>
+			<canbedisabled>1</canbedisabled>
+		</cronjob>
+	</import>
+</data>
