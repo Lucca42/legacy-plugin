@@ -38,6 +38,8 @@ final class GwUpvoteDisplayListener implements IParameterizedEventListener
             $postIDs = \array_map('intval', $eventObj->objectList->getObjectIDs());
         }
 
+        $firstPostID = $this->getFirstPostID((int)$thread->threadID);
+
         $counts = [];
         $mine = [];
         if (!empty($postIDs)) {
@@ -48,13 +50,23 @@ final class GwUpvoteDisplayListener implements IParameterizedEventListener
             }
         }
 
+        // Edit button to hide on the locked first post (regular users only).
+        $lockedEdit = [];
+        if ($board && (int)$board->gwLockFirstPost && $firstPostID
+            && !WCF::getSession()->getPermission('mod.board.canEditPost')
+            && !WCF::getSession()->getPermission('admin.general.canUseAcp')
+        ) {
+            $lockedEdit = [$firstPostID];
+        }
+
         WCF::getTPL()->assign([
             'gwUpvoteBoardEnabled' => $enabled,
-            'gwUpvoteFirstPostID' => $this->getFirstPostID((int)$thread->threadID),
+            'gwUpvoteFirstPostID' => $firstPostID,
             'gwUpvoteThreadAuthor' => (int)$thread->userID,
             'gwUpvoteCount' => $counts,
             'gwUpvoteMine' => $mine,
             'gwUpvoteGuard' => new RenderGuard(),
+            'gwUpvoteLockedEdit' => $lockedEdit,
         ]);
     }
 

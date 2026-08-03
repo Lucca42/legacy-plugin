@@ -9,11 +9,12 @@
 			<templatecode><![CDATA[{if $gwRetractBoardEnabled|isset && $gwRetractBoardEnabled}{include file='__gwRetractButton'}{/if}]]></templatecode>
 		</templatelistener>
 
-		<!-- Submit-time confirmation on reply (replies locked against editing). -->
+		<!-- Submit-time confirmation on reply (replies locked against editing). Injected
+		     via the content-interaction bar, which renders on the thread page. -->
 		<templatelistener name="replyConfirm">
 			<environment>user</environment>
-			<templatename>footer</templatename>
-			<eventname>footer</eventname>
+			<templatename>contentInteraction</templatename>
+			<eventname>afterButtons</eventname>
 			<templatecode><![CDATA[{include file='__gwReplyConfirm'}]]></templatecode>
 		</templatelistener>
 

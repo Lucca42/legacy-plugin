@@ -31,12 +31,14 @@ final class GwLockRepliesListener implements IParameterizedEventListener
             return;
         }
 
-        $postID = (int)($eventObj->objectIDs[0] ?? 0);
+        // Inline editing passes the post id as parameters['objectID'], not objectIDs.
+        $params = \method_exists($eventObj, 'getParameters') ? $eventObj->getParameters() : [];
+        $postID = (int)($params['objectID'] ?? ($eventObj->objectIDs[0] ?? 0));
         if (!$postID) {
             return;
         }
 
-        $sql = "SELECT      thread.firstPostID,
+        $sql = "SELECT      post.threadID,
                             board.gwLockReplies
                 FROM        wbb1_post post
                 INNER JOIN  wbb1_thread thread ON thread.threadID = post.threadID
@@ -46,13 +48,22 @@ final class GwLockRepliesListener implements IParameterizedEventListener
         $statement->execute([$postID]);
         $row = $statement->fetchSingleRow();
 
-        if (!$row) {
+        if (!$row || !(int)$row['gwLockReplies']) {
             return;
         }
 
-        // Replies only (the first post is handled by the upvote/lock plugin, if at all).
-        if ((int)$row['gwLockReplies'] && (int)$row['firstPostID'] !== $postID) {
+        // Replies only (the first post is handled by the upvote plugin, if at all).
+        if ($this->getFirstPostID((int)$row['threadID']) !== $postID) {
             throw new PermissionDeniedException();
         }
+    }
+
+    private function getFirstPostID(int $threadID): int
+    {
+        $sql = "SELECT MIN(postID) FROM wbb1_post WHERE threadID = ?";
+        $statement = WCF::getDB()->prepare($sql);
+        $statement->execute([$threadID]);
+
+        return (int)$statement->fetchSingleColumn();
     }
 }

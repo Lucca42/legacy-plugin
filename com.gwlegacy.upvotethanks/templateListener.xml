@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/6.0/templateListener.xsd">
 	<import>
+		<!-- Hide the edit button on the locked first post (thread page). -->
+		<templatelistener name="upvoteHideEdit">
+			<environment>user</environment>
+			<templatename>contentInteraction</templatename>
+			<eventname>afterButtons</eventname>
+			<templatecode><![CDATA[{if $gwUpvoteLockedEdit|isset}{include file='__gwUpvoteHideEdit'}{/if}]]></templatecode>
+		</templatelistener>
+
 		<!-- Upvote button at the bottom of each reply. -->
 		<templatelistener name="upvoteButton">
 			<environment>user</environment>
@@ -9,11 +17,12 @@
 			<templatecode><![CDATA[{if $gwUpvoteBoardEnabled|isset && $gwUpvoteBoardEnabled}{include file='__gwUpvoteButton'}{/if}]]></templatecode>
 		</templatelistener>
 
-		<!-- Submit-time confirmation on the thread-add page (first post lock). -->
+		<!-- Submit-time confirmation on the thread-add page (first post lock). The page
+		     header renders on every page; the script only binds when the flag is set. -->
 		<templatelistener name="threadAddConfirm">
 			<environment>user</environment>
-			<templatename>footer</templatename>
-			<eventname>footer</eventname>
+			<templatename>header</templatename>
+			<eventname>afterPageHeader</eventname>
 			<templatecode><![CDATA[{include file='__gwThreadAddConfirm'}]]></templatecode>
 		</templatelistener>
 

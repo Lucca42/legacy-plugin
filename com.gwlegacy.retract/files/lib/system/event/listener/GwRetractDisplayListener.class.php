@@ -42,21 +42,39 @@ final class GwRetractDisplayListener implements IParameterizedEventListener
             $confirmReplyLock = true;
         }
 
+        $firstPostID = $this->getFirstPostID((int)$thread->threadID);
+
+        $postIDs = [];
+        if (isset($eventObj->objectList) && \is_object($eventObj->objectList)) {
+            $postIDs = \array_map('intval', $eventObj->objectList->getObjectIDs());
+        }
+
         $retractPosts = [];
-        if ($board && (int)$board->gwRetractEnabled
-            && isset($eventObj->objectList) && \is_object($eventObj->objectList)
+        if ($board && (int)$board->gwRetractEnabled && !empty($postIDs)) {
+            $retractPosts = $this->loadRetractPosts($postIDs);
+        }
+
+        // Edit buttons to hide on locked replies (every displayed post except the first),
+        // regular users only.
+        $lockedEdit = [];
+        if ($board && (int)$board->gwLockReplies && !empty($postIDs)
+            && !WCF::getSession()->getPermission('mod.board.canEditPost')
+            && !WCF::getSession()->getPermission('admin.general.canUseAcp')
         ) {
-            $retractPosts = $this->loadRetractPosts(
-                \array_map('intval', $eventObj->objectList->getObjectIDs())
-            );
+            foreach ($postIDs as $postID) {
+                if ($postID !== $firstPostID) {
+                    $lockedEdit[] = $postID;
+                }
+            }
         }
 
         WCF::getTPL()->assign([
             'gwRetractBoardEnabled' => $board && (int)$board->gwRetractEnabled,
-            'gwRetractFirstPostID' => $this->getFirstPostID((int)$thread->threadID),
+            'gwRetractFirstPostID' => $firstPostID,
             'gwRetractPosts' => $retractPosts,
             'gwRetractGuard' => new RenderGuard(),
             'gwConfirmReplyLock' => $confirmReplyLock,
+            'gwRetractLockedEdit' => $lockedEdit,
         ]);
     }
 
