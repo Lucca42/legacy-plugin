@@ -11,8 +11,8 @@
 
 	{if $gwCanThank}
 		<li>
-			<a href="#" class="button small gwThanksButton{if $gwThanks} active{/if}" data-post-id="{@$gwPID}" title="Thank this reply">
-				{icon name='heart'} <span>Thanks</span>
+			<a href="#" class="button small gwThanksButton{if $gwThanks} active{/if}" data-post-id="{@$gwPID}" title="Thank this reply"{if $gwThanks} style="color:#c0392b;"{/if}>
+				{icon name='heart'} <span class="gwThanksLabel">{if $gwThanks}Thanked{else}Thanks{/if}</span>
 			</a>
 		</li>
 	{elseif $gwThanks}
@@ -41,6 +41,11 @@
 							.objectIds([parseInt(button.dataset.postId, 10)])
 							.dispatch();
 						button.classList.toggle('active', !!result.active);
+						button.style.color = result.active ? '#c0392b' : '';
+						const label = button.querySelector('.gwThanksLabel');
+						if (label) {
+							label.textContent = result.active ? 'Thanked' : 'Thanks';
+						}
 					} finally {
 						button.classList.remove('disabled');
 					}

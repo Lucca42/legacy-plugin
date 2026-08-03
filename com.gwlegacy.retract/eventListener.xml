@@ -9,6 +9,14 @@
 			<environment>user</environment>
 		</eventlistener>
 
+		<!-- Same when a reply is rendered through the quick reply (AJAX). -->
+		<eventlistener name="retractQuickReply">
+			<eventclassname>wcf\system\message\QuickReplyManager</eventclassname>
+			<eventname>createdMessage</eventname>
+			<listenerclassname>wcf\system\event\listener\GwRetractQuickReplyListener</listenerclassname>
+			<environment>user</environment>
+		</eventlistener>
+
 		<!-- Lock replies against editing. PostAction only fires validateAction; the
 		     listener filters on the beginEdit / save action names. -->
 		<eventlistener name="lockReplies">

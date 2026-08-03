@@ -54,27 +54,12 @@ final class GwRetractDisplayListener implements IParameterizedEventListener
             $retractPosts = $this->loadRetractPosts($postIDs);
         }
 
-        // Edit buttons to hide on locked replies (every displayed post except the first),
-        // regular users only.
-        $lockedEdit = [];
-        if ($board && (int)$board->gwLockReplies && !empty($postIDs)
-            && !WCF::getSession()->getPermission('mod.board.canEditPost')
-            && !WCF::getSession()->getPermission('admin.general.canUseAcp')
-        ) {
-            foreach ($postIDs as $postID) {
-                if ($postID !== $firstPostID) {
-                    $lockedEdit[] = $postID;
-                }
-            }
-        }
-
         WCF::getTPL()->assign([
             'gwRetractBoardEnabled' => $board && (int)$board->gwRetractEnabled,
             'gwRetractFirstPostID' => $firstPostID,
             'gwRetractPosts' => $retractPosts,
             'gwRetractGuard' => new RenderGuard(),
             'gwConfirmReplyLock' => $confirmReplyLock,
-            'gwRetractLockedEdit' => $lockedEdit,
         ]);
     }
 

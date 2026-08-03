@@ -9,6 +9,14 @@
 			<environment>user</environment>
 		</eventlistener>
 
+		<!-- Same data when a reply is rendered through the quick reply (AJAX). -->
+		<eventlistener name="upvoteQuickReply">
+			<eventclassname>wcf\system\message\QuickReplyManager</eventclassname>
+			<eventname>createdMessage</eventname>
+			<listenerclassname>wcf\system\event\listener\GwUpvoteQuickReplyListener</listenerclassname>
+			<environment>user</environment>
+		</eventlistener>
+
 		<!-- Warn on the thread-add page that the first post will not be editable. -->
 		<eventlistener name="threadAddConfirm">
 			<eventclassname>wbb\form\ThreadAddForm</eventclassname>

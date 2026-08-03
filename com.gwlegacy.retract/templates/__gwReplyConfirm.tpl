@@ -24,21 +24,34 @@
 		}, true);
 	})();
 </script>
-{* Hide the edit button on locked replies (server-side already rejects the edit). *}
-{if $gwRetractLockedEdit|isset && $gwRetractLockedEdit|count}
+{* Hide the edit button on locked replies, including replies added later via the quick
+   reply. The server already rejects the edit; this removes the dead button. *}
+{if $gwConfirmReplyLock|isset && $gwConfirmReplyLock && !$gwReplyEditHideBound|isset}
+	{assign var=gwReplyEditHideBound value=true}
 	<script data-relocate="true">
 		(function () {
-			var ids = [{implode from=$gwRetractLockedEdit item=gwId}{@$gwId}{/implode}];
-			ids.forEach(function (pid) {
-				var post = document.querySelector('[data-post-id="' + pid + '"]');
-				if (!post) {
-					return;
-				}
-				var button = post.querySelector('.jsMessageEditButton');
-				if (button) {
-					(button.closest('li') || button).style.display = 'none';
-				}
-			});
+			var firstPostID = {@$gwRetractFirstPostID};
+			function hide(root) {
+				root.querySelectorAll('[data-post-id]').forEach(function (post) {
+					if (parseInt(post.dataset.postId, 10) === firstPostID) {
+						return;
+					}
+					var button = post.querySelector('.jsMessageEditButton');
+					if (button) {
+						(button.closest('li') || button).style.display = 'none';
+					}
+				});
+			}
+			hide(document);
+			new MutationObserver(function (mutations) {
+				mutations.forEach(function (mutation) {
+					mutation.addedNodes.forEach(function (node) {
+						if (node.nodeType === 1) {
+							hide(node.parentNode || document);
+						}
+					});
+				});
+			}).observe(document.body, { childList: true, subtree: true });
 		})();
 	</script>
 {/if}
