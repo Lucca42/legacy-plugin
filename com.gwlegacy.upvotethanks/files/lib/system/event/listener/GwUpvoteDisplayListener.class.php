@@ -42,8 +42,10 @@ final class GwUpvoteDisplayListener implements IParameterizedEventListener
 
         $counts = [];
         $mine = [];
+        $thanked = [];
         if (!empty($postIDs)) {
             $counts = $this->loadCounts($postIDs);
+            $thanked = $this->loadThanked($postIDs);
             $userID = WCF::getUser()->userID;
             if ($userID) {
                 $mine = $this->loadMine($postIDs, $userID);
@@ -67,7 +69,30 @@ final class GwUpvoteDisplayListener implements IParameterizedEventListener
             'gwUpvoteMine' => $mine,
             'gwUpvoteGuard' => new RenderGuard(),
             'gwUpvoteLockedEdit' => $lockedEdit,
+            'gwThanked' => $thanked,
+            'gwThanksGuard' => new RenderGuard(),
         ]);
+    }
+
+    /**
+     * @param int[] $postIDs
+     * @return array<int, bool>
+     */
+    private function loadThanked(array $postIDs): array
+    {
+        $conditions = new PreparedStatementConditionBuilder();
+        $conditions->add('postID IN (?)', [$postIDs]);
+
+        $sql = "SELECT postID FROM wcf1_gw_post_thanks " . $conditions;
+        $statement = WCF::getDB()->prepare($sql);
+        $statement->execute($conditions->getParameters());
+
+        $thanked = [];
+        while ($row = $statement->fetchArray()) {
+            $thanked[(int)$row['postID']] = true;
+        }
+
+        return $thanked;
     }
 
     /**

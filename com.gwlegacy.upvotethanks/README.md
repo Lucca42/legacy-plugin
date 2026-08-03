@@ -11,6 +11,8 @@ Enabled per board (checkboxes in the board's ACP edit form):
   logged-in user may upvote or remove their upvote by clicking again, except the thread
   author and the reply's own author. The first post is never upvotable. The count is
   visible to everyone, including guests.
+- **Thanks on replies.** The thread author gets a thanks button on replies made to them
+  (not their own, not the first post). The thanked state is shown to everyone.
 - **Lock the first post.** Once posted, the first post of a thread on this board can no
   longer be edited, moderators excepted. Enforced both when opening the inline editor and
   when saving.

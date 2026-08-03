@@ -17,6 +17,14 @@
 			<templatecode><![CDATA[{if $gwUpvoteBoardEnabled|isset && $gwUpvoteBoardEnabled}{include file='__gwUpvoteButton'}{/if}]]></templatecode>
 		</templatelistener>
 
+		<!-- Thanks button at the bottom of each reply (thread author only). -->
+		<templatelistener name="thanksButton">
+			<environment>user</environment>
+			<templatename>threadPostList</templatename>
+			<eventname>messageFooterButtons</eventname>
+			<templatecode><![CDATA[{if $gwUpvoteBoardEnabled|isset && $gwUpvoteBoardEnabled}{include file='__gwThanksButton'}{/if}]]></templatecode>
+		</templatelistener>
+
 		<!-- Submit-time confirmation on the thread-add page (first post lock). The page
 		     header renders on every page; the script only binds when the flag is set. -->
 		<templatelistener name="threadAddConfirm">

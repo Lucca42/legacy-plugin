@@ -4,9 +4,9 @@
 	<dd>
 		<label>
 			<input type="checkbox" name="gwUpvoteEnabled" value="1"{if $gwUpvoteEnabled} checked{/if}>
-			Enable upvotes on replies
+			Enable upvotes and thanks on replies
 		</label>
-		<small>Shows an upvote button on replies. Any logged-in user may upvote, except the thread author and the post author.</small>
+		<small>Shows an upvote button on replies (any logged-in user except the thread and post authors) and a thanks button for the thread author to thank replies.</small>
 	</dd>
 </dl>
 <dl>
