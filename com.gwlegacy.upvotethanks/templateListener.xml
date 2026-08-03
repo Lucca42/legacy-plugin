@@ -9,6 +9,14 @@
 			<templatecode><![CDATA[{if $gwUpvoteBoardEnabled|isset && $gwUpvoteBoardEnabled}{include file='__gwUpvoteButton'}{/if}]]></templatecode>
 		</templatelistener>
 
+		<!-- Submit-time confirmation on the thread-add page (first post lock). -->
+		<templatelistener name="threadAddConfirm">
+			<environment>user</environment>
+			<templatename>footer</templatename>
+			<eventname>footer</eventname>
+			<templatecode><![CDATA[{include file='__gwThreadAddConfirm'}]]></templatecode>
+		</templatelistener>
+
 		<!-- Per-board options on the board ACP form. The dataFields event is emitted in
 		     more than one place, so a shared render guard keeps the fields to one copy. -->
 		<templatelistener name="upvoteBoardOptions">

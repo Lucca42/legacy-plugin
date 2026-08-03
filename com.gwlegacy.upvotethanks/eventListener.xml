@@ -9,6 +9,14 @@
 			<environment>user</environment>
 		</eventlistener>
 
+		<!-- Warn on the thread-add page that the first post will not be editable. -->
+		<eventlistener name="threadAddConfirm">
+			<eventclassname>wbb\form\ThreadAddForm</eventclassname>
+			<eventname>assignVariables</eventname>
+			<listenerclassname>wcf\system\event\listener\GwThreadAddConfirmListener</listenerclassname>
+			<environment>user</environment>
+		</eventlistener>
+
 		<!-- Lock the first post against editing (both opening the editor and saving). -->
 		<eventlistener name="lockFirstPostBeginEdit">
 			<eventclassname>wbb\data\post\PostAction</eventclassname>

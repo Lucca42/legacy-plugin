@@ -5,7 +5,7 @@
 		<packagename language="fr">GWLegacy · Rétractation</packagename>
 		<packagedescription>Per-board retract button on replies: the author posts a new reply quoting the original, marked "Retracted". Optionally locks replies against editing.</packagedescription>
 		<packagedescription language="fr">Bouton de rétractation par board sur les réponses : l'auteur poste une nouvelle réponse citant l'originale, marquée « Retracted ». Peut aussi verrouiller les réponses contre l'édition.</packagedescription>
-		<version>1.0.0</version>
+		<version>1.1.0</version>
 		<date>2026-08-03</date>
 	</packageinformation>
 

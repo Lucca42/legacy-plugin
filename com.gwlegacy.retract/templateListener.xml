@@ -9,6 +9,14 @@
 			<templatecode><![CDATA[{if $gwRetractBoardEnabled|isset && $gwRetractBoardEnabled}{include file='__gwRetractButton'}{/if}]]></templatecode>
 		</templatelistener>
 
+		<!-- Submit-time confirmation on reply (replies locked against editing). -->
+		<templatelistener name="replyConfirm">
+			<environment>user</environment>
+			<templatename>footer</templatename>
+			<eventname>footer</eventname>
+			<templatecode><![CDATA[{include file='__gwReplyConfirm'}]]></templatecode>
+		</templatelistener>
+
 		<!-- Per-board options on the board ACP form. The dataFields event is emitted in
 		     more than one place, so a shared render guard keeps the fields to one copy. -->
 		<templatelistener name="retractBoardOptions">
