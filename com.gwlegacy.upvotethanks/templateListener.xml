@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/6.0/templateListener.xsd">
+	<import>
+		<!-- Upvote button at the bottom of each reply. -->
+		<templatelistener name="upvoteButton">
+			<environment>user</environment>
+			<templatename>threadPostList</templatename>
+			<eventname>messageFooterButtons</eventname>
+			<templatecode><![CDATA[{if $gwUpvoteBoardEnabled|isset && $gwUpvoteBoardEnabled}{include file='__gwUpvoteButton'}{/if}]]></templatecode>
+		</templatelistener>
+
+		<!-- Per-board options on the board ACP form. The dataFields event is emitted in
+		     more than one place, so a shared render guard keeps the fields to one copy. -->
+		<templatelistener name="upvoteBoardOptions">
+			<environment>admin</environment>
+			<templatename>boardAdd</templatename>
+			<eventname>dataFields</eventname>
+			<templatecode><![CDATA[{if $gwUpvoteOptionGuard|isset && $gwUpvoteOptionGuard->renderOnce()}{include file='__gwUpvoteBoardOptions'}{/if}]]></templatecode>
+		</templatelistener>
+	</import>
+</data>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/6.0/eventListener.xsd">
+	<import>
+		<!-- Preload upvote data for the thread page. -->
+		<eventlistener name="upvoteDisplay">
+			<eventclassname>wbb\page\ThreadPage</eventclassname>
+			<eventname>assignVariables</eventname>
+			<listenerclassname>wcf\system\event\listener\GwUpvoteDisplayListener</listenerclassname>
+			<environment>user</environment>
+		</eventlistener>
+
+		<!-- Lock the first post against editing (both opening the editor and saving). -->
+		<eventlistener name="lockFirstPostBeginEdit">
+			<eventclassname>wbb\data\post\PostAction</eventclassname>
+			<eventname>validateBeginEdit</eventname>
+			<listenerclassname>wcf\system\event\listener\GwLockFirstPostListener</listenerclassname>
+			<environment>user</environment>
+		</eventlistener>
+		<eventlistener name="lockFirstPostSave">
+			<eventclassname>wbb\data\post\PostAction</eventclassname>
+			<eventname>validateSave</eventname>
+			<listenerclassname>wcf\system\event\listener\GwLockFirstPostListener</listenerclassname>
+			<environment>user</environment>
+		</eventlistener>
+
+		<!-- Per-board options on the board ACP form (read / save / prefill / display). -->
+		<eventlistener name="upvoteBoardRead">
+			<eventclassname>wbb\acp\form\BoardAddForm</eventclassname>
+			<eventname>readFormParameters</eventname>
+			<listenerclassname>wcf\system\event\listener\GwUpvoteBoardOptionListener</listenerclassname>
+			<environment>admin</environment>
+			<inherit>1</inherit>
+		</eventlistener>
+		<eventlistener name="upvoteBoardSave">
+			<eventclassname>wbb\acp\form\BoardAddForm</eventclassname>
+			<eventname>save</eventname>
+			<listenerclassname>wcf\system\event\listener\GwUpvoteBoardOptionListener</listenerclassname>
+			<environment>admin</environment>
+			<inherit>1</inherit>
+		</eventlistener>
+		<eventlistener name="upvoteBoardAssign">
+			<eventclassname>wbb\acp\form\BoardAddForm</eventclassname>
+			<eventname>assignVariables</eventname>
+			<listenerclassname>wcf\system\event\listener\GwUpvoteBoardOptionListener</listenerclassname>
+			<environment>admin</environment>
+			<inherit>1</inherit>
+		</eventlistener>
+		<eventlistener name="upvoteBoardReadData">
+			<eventclassname>wbb\acp\form\BoardEditForm</eventclassname>
+			<eventname>readData</eventname>
+			<listenerclassname>wcf\system\event\listener\GwUpvoteBoardOptionListener</listenerclassname>
+			<environment>admin</environment>
+		</eventlistener>
+	</import>
+</data>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/6.0/templateListener.xsd">
+	<import>
+		<!-- Retract button at the bottom of a reply (author only). -->
+		<templatelistener name="retractButton">
+			<environment>user</environment>
+			<templatename>threadPostList</templatename>
+			<eventname>messageFooterButtons</eventname>
+			<templatecode><![CDATA[{if $gwRetractBoardEnabled|isset && $gwRetractBoardEnabled}{include file='__gwRetractButton'}{/if}]]></templatecode>
+		</templatelistener>
+
+		<!-- Per-board options on the board ACP form. The dataFields event is emitted in
+		     more than one place, so a shared render guard keeps the fields to one copy. -->
+		<templatelistener name="retractBoardOptions">
+			<environment>admin</environment>
+			<templatename>boardAdd</templatename>
+			<eventname>dataFields</eventname>
+			<templatecode><![CDATA[{if $gwRetractOptionGuard|isset && $gwRetractOptionGuard->renderOnce()}{include file='__gwRetractBoardOptions'}{/if}]]></templatecode>
+		</templatelistener>
+	</import>
+</data>

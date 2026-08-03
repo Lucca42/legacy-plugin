@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package name="com.gwlegacy.upvotethanks" xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/6.0/package.xsd">
+	<packageinformation>
+		<packagename>GWLegacy Upvote and Thanks</packagename>
+		<packagename language="fr">GWLegacy · Upvote et remerciements</packagename>
+		<packagedescription>Per-board upvote button on thread replies (any logged-in user except the thread and post authors), plus an option to lock the first post against editing.</packagedescription>
+		<packagedescription language="fr">Bouton d'upvote par board sur les réponses (tout utilisateur connecté sauf l'auteur du sujet et du message), avec une option pour verrouiller le premier post contre l'édition.</packagedescription>
+		<version>1.0.0</version>
+		<date>2026-08-03</date>
+	</packageinformation>
+
+	<authorinformation>
+		<author>Calin</author>
+		<authorurl>https://guildwarslegacy.com</authorurl>
+	</authorinformation>
+
+	<requiredpackages>
+		<requiredpackage minversion="6.0.0">com.woltlab.wcf</requiredpackage>
+		<requiredpackage minversion="6.0.0">com.woltlab.wbb</requiredpackage>
+	</requiredpackages>
+
+	<instructions type="install">
+		<instruction type="file" />
+		<instruction type="acpTemplate" />
+		<instruction type="template" />
+		<instruction type="database">acp/database/install_com.gwlegacy.upvotethanks.php</instruction>
+		<instruction type="eventListener" />
+		<instruction type="templateListener" />
+	</instructions>
+
+	<instructions type="update" fromversion="1.*">
+		<instruction type="file" />
+		<instruction type="acpTemplate" />
+		<instruction type="template" />
+		<instruction type="database">acp/database/install_com.gwlegacy.upvotethanks.php</instruction>
+		<instruction type="eventListener" />
+		<instruction type="templateListener" />
+	</instructions>
+</package>

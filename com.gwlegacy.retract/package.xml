@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package name="com.gwlegacy.retract" xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/6.0/package.xsd">
+	<packageinformation>
+		<packagename>GWLegacy Retract</packagename>
+		<packagename language="fr">GWLegacy · Rétractation</packagename>
+		<packagedescription>Per-board retract button on replies: the author posts a new reply quoting the original, marked "Retracted". Optionally locks replies against editing.</packagedescription>
+		<packagedescription language="fr">Bouton de rétractation par board sur les réponses : l'auteur poste une nouvelle réponse citant l'originale, marquée « Retracted ». Peut aussi verrouiller les réponses contre l'édition.</packagedescription>
+		<version>1.0.0</version>
+		<date>2026-08-03</date>
+	</packageinformation>
+
+	<authorinformation>
+		<author>Calin</author>
+		<authorurl>https://guildwarslegacy.com</authorurl>
+	</authorinformation>
+
+	<requiredpackages>
+		<requiredpackage minversion="6.0.0">com.woltlab.wcf</requiredpackage>
+		<requiredpackage minversion="6.0.0">com.woltlab.wbb</requiredpackage>
+	</requiredpackages>
+
+	<instructions type="install">
+		<instruction type="file" />
+		<instruction type="acpTemplate" />
+		<instruction type="template" />
+		<instruction type="database">acp/database/install_com.gwlegacy.retract.php</instruction>
+		<instruction type="eventListener" />
+		<instruction type="templateListener" />
+	</instructions>
+
+	<instructions type="update" fromversion="1.*">
+		<instruction type="file" />
+		<instruction type="acpTemplate" />
+		<instruction type="template" />
+		<instruction type="database">acp/database/install_com.gwlegacy.retract.php</instruction>
+		<instruction type="eventListener" />
+		<instruction type="templateListener" />
+	</instructions>
+</package>
