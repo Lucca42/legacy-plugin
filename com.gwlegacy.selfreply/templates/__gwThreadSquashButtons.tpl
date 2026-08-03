@@ -33,6 +33,24 @@
 			document.getElementById('gwShowSquashed')?.addEventListener('click', (e) => { e.preventDefault(); reloadWithArchive(true); });
 			document.getElementById('gwHideSquashed')?.addEventListener('click', (e) => { e.preventDefault(); reloadWithArchive(false); });
 
+			// Keep showSquashed across pagination: the pagination component derives every
+			// page link from its `url` attribute, so fold the parameter into it.
+			if (new URLSearchParams(window.location.search).has('showSquashed')) {
+				customElements.whenDefined('woltlab-core-pagination').then(() => {
+					document.querySelectorAll('woltlab-core-pagination').forEach((pagination) => {
+						const base = pagination.url;
+						if (!base) {
+							return;
+						}
+						const paged = new URL(base, window.location.href);
+						if (!paged.searchParams.has('showSquashed')) {
+							paged.searchParams.set('showSquashed', '1');
+							pagination.url = paged.toString();
+						}
+					});
+				});
+			}
+
 			const squash = document.getElementById('gwSquashButton');
 			squash?.addEventListener('click', async (e) => {
 				e.preventDefault();

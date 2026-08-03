@@ -5,7 +5,7 @@
 		<packagename language="fr">GWLegacy · Outils pour boards de vente</packagename>
 		<packagedescription>Per-board tools for trading boards: rate-limit how often a thread author resurfaces their own thread (an update reply or a bump button, sharing one interval), and let them squash old replies when relisting.</packagedescription>
 		<packagedescription language="fr">Outils par board pour les forums de vente : limite la fréquence à laquelle l'auteur fait remonter son sujet (réponse de mise à jour ou bouton de bump, partageant le même intervalle), et lui permet de masquer les anciennes réponses lors d'un relisting.</packagedescription>
-		<version>1.2.1</version>
+		<version>1.2.2</version>
 		<date>2026-07-23</date>
 	</packageinformation>
 
