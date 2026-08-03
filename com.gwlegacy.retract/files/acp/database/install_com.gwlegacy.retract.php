@@ -3,7 +3,7 @@
 /**
  * Schema for com.gwlegacy.retract.
  *
- *   wcf1_gw_retract_post     ids of posts created by the retract action
+ *   wcf1_gw_retract_post     ids of non-retractable posts (retracted originals + retracts)
  *   wbb1_board.gwRetractEnabled  shows the retract button on replies
  *   wbb1_board.gwLockReplies     locks replies against editing on this board
  *

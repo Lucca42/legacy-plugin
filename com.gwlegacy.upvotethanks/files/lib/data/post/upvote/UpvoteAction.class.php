@@ -96,7 +96,9 @@ final class UpvoteAction extends AbstractDatabaseObjectAction
             WCF::getDB()->prepare($sql)->execute([$this->postID, $userID]);
             $active = false;
         } else {
-            $sql = "INSERT INTO wcf1_gw_post_upvote (postID, userID, time) VALUES (?, ?, ?)";
+            // INSERT IGNORE keeps a concurrent double-click from raising a duplicate-key
+            // error; the row ends up present either way, so the toggle is still on.
+            $sql = "INSERT IGNORE INTO wcf1_gw_post_upvote (postID, userID, time) VALUES (?, ?, ?)";
             WCF::getDB()->prepare($sql)->execute([$this->postID, $userID, TIME_NOW]);
             $active = true;
         }

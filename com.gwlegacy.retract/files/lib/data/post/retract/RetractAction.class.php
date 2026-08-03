@@ -105,19 +105,45 @@ final class RetractAction extends AbstractDatabaseObjectAction
             'username' => WCF::getUser()->username,
         ];
 
-        (new PostAction([], 'create', ['data' => $data]))->executeAction();
+        $returnValues = (new PostAction([], 'create', ['data' => $data]))->executeAction();
 
-        // Mark the freshly created reply (the newest post in the thread) as a retract
-        // post so it cannot itself be retracted.
-        $sql = "SELECT MAX(postID) FROM wbb1_post WHERE threadID = ?";
-        $statement = WCF::getDB()->prepare($sql);
-        $statement->execute([$this->threadID]);
-        $newPostID = (int)$statement->fetchSingleColumn();
-
-        if ($newPostID) {
-            $sql = "INSERT IGNORE INTO wcf1_gw_retract_post (postID) VALUES (?)";
-            WCF::getDB()->prepare($sql)->execute([$newPostID]);
+        // Prefer the id returned by the action; fall back to the newest post by this user
+        // in the thread (immune to concurrent posts from other users).
+        $newPostID = $this->extractPostID($returnValues);
+        if (!$newPostID) {
+            $sql = "SELECT MAX(postID) FROM wbb1_post WHERE threadID = ? AND userID = ?";
+            $statement = WCF::getDB()->prepare($sql);
+            $statement->execute([$this->threadID, WCF::getUser()->userID]);
+            $newPostID = (int)$statement->fetchSingleColumn();
         }
+
+        // Both the retracted original and the new retract post become non-retractable:
+        // the original so it cannot be retracted twice (spam), the new one so a retract
+        // cannot itself be retracted.
+        $sql = "INSERT IGNORE INTO wcf1_gw_retract_post (postID) VALUES (?)";
+        $statement = WCF::getDB()->prepare($sql);
+        $statement->execute([$this->postID]);
+        if ($newPostID) {
+            $statement->execute([$newPostID]);
+        }
+    }
+
+    /**
+     * Extracts the created post id from a PostAction 'create' result, if present.
+     */
+    private function extractPostID(array $returnValues): int
+    {
+        $object = $returnValues['returnValues'] ?? null;
+        if (\is_object($object)) {
+            if (isset($object->postID)) {
+                return (int)$object->postID;
+            }
+            if (\method_exists($object, 'getObjectID')) {
+                return (int)$object->getObjectID();
+            }
+        }
+
+        return 0;
     }
 
     private function isRetractPost(int $postID): bool
