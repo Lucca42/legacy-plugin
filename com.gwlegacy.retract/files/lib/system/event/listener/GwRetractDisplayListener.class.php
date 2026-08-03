@@ -2,6 +2,7 @@
 
 namespace wcf\system\event\listener;
 
+use wcf\system\database\util\PreparedStatementConditionBuilder;
 use wcf\system\gwretract\RenderGuard;
 use wcf\system\WCF;
 
@@ -10,6 +11,7 @@ use wcf\system\WCF;
  *
  *   {$gwRetractBoardEnabled}  the retract button is enabled on this board
  *   {$gwRetractFirstPostID}   first post of the thread (cannot be retracted)
+ *   {$gwRetractPosts}         map postID => true for posts that are themselves retracts
  *   {$gwRetractGuard}         render-once guard for the shared script
  *   {$gwConfirmReplyLock}     warn on reply submit that replies cannot be edited
  *
@@ -40,12 +42,47 @@ final class GwRetractDisplayListener implements IParameterizedEventListener
             $confirmReplyLock = true;
         }
 
+        $retractPosts = [];
+        if ($board && (int)$board->gwRetractEnabled
+            && isset($eventObj->objectList) && \is_object($eventObj->objectList)
+        ) {
+            $retractPosts = $this->loadRetractPosts(
+                \array_map('intval', $eventObj->objectList->getObjectIDs())
+            );
+        }
+
         WCF::getTPL()->assign([
             'gwRetractBoardEnabled' => $board && (int)$board->gwRetractEnabled,
             'gwRetractFirstPostID' => $this->getFirstPostID((int)$thread->threadID),
+            'gwRetractPosts' => $retractPosts,
             'gwRetractGuard' => new RenderGuard(),
             'gwConfirmReplyLock' => $confirmReplyLock,
         ]);
+    }
+
+    /**
+     * @param int[] $postIDs
+     * @return array<int, bool>
+     */
+    private function loadRetractPosts(array $postIDs): array
+    {
+        if (empty($postIDs)) {
+            return [];
+        }
+
+        $conditions = new PreparedStatementConditionBuilder();
+        $conditions->add('postID IN (?)', [$postIDs]);
+
+        $sql = "SELECT postID FROM wcf1_gw_retract_post " . $conditions;
+        $statement = WCF::getDB()->prepare($sql);
+        $statement->execute($conditions->getParameters());
+
+        $map = [];
+        while ($row = $statement->fetchArray()) {
+            $map[(int)$row['postID']] = true;
+        }
+
+        return $map;
     }
 
     /**

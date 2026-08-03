@@ -1,7 +1,7 @@
 {* Retract button at the bottom of a reply, shown to the reply's own author only.
    Injected once per post into messageFooterButtons; the click handler is emitted once. *}
 {assign var=gwPID value=$post->postID}
-{if $gwPID != $gwRetractFirstPostID && $__wcf->user->userID && $__wcf->user->userID == $post->userID}
+{if $gwPID != $gwRetractFirstPostID && $__wcf->user->userID && $__wcf->user->userID == $post->userID && !$gwRetractPosts[$gwPID]|isset}
 	<li>
 		<a href="#" class="button small gwRetractButton" data-post-id="{@$gwPID}" title="Retract this reply">
 			{icon name='rotate-left'} <span>Retract</span>

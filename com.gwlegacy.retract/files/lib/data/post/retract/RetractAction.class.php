@@ -67,6 +67,9 @@ final class RetractAction extends AbstractDatabaseObjectAction
         if ((int)$row['userID'] !== $userID) {
             throw new PermissionDeniedException(); // author only
         }
+        if ($this->isRetractPost($postID)) {
+            throw new PermissionDeniedException(); // a retract cannot itself be retracted
+        }
 
         $this->postID = $postID;
         $this->threadID = (int)$row['threadID'];
@@ -103,5 +106,26 @@ final class RetractAction extends AbstractDatabaseObjectAction
         ];
 
         (new PostAction([], 'create', ['data' => $data]))->executeAction();
+
+        // Mark the freshly created reply (the newest post in the thread) as a retract
+        // post so it cannot itself be retracted.
+        $sql = "SELECT MAX(postID) FROM wbb1_post WHERE threadID = ?";
+        $statement = WCF::getDB()->prepare($sql);
+        $statement->execute([$this->threadID]);
+        $newPostID = (int)$statement->fetchSingleColumn();
+
+        if ($newPostID) {
+            $sql = "INSERT IGNORE INTO wcf1_gw_retract_post (postID) VALUES (?)";
+            WCF::getDB()->prepare($sql)->execute([$newPostID]);
+        }
+    }
+
+    private function isRetractPost(int $postID): bool
+    {
+        $sql = "SELECT COUNT(*) FROM wcf1_gw_retract_post WHERE postID = ?";
+        $statement = WCF::getDB()->prepare($sql);
+        $statement->execute([$postID]);
+
+        return (int)$statement->fetchSingleColumn() > 0;
     }
 }
