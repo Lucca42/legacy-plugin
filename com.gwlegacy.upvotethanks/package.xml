@@ -5,7 +5,7 @@
 		<packagename language="fr">GWLegacy · Upvote et remerciements</packagename>
 		<packagedescription>Per-board upvote button on thread replies (any logged-in user except the thread and post authors), plus an option to lock the first post against editing.</packagedescription>
 		<packagedescription language="fr">Bouton d'upvote par board sur les réponses (tout utilisateur connecté sauf l'auteur du sujet et du message), avec une option pour verrouiller le premier post contre l'édition.</packagedescription>
-		<version>1.1.3</version>
+		<version>1.1.4</version>
 		<date>2026-08-03</date>
 	</packageinformation>
 

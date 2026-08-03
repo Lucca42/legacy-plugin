@@ -18,6 +18,13 @@ final class GwLockFirstPostListener implements IParameterizedEventListener
 {
     public function execute($eventObj, $className, $eventName, array &$parameters): void
     {
+        // Only the edit actions matter (open editor / save edit).
+        if (!\method_exists($eventObj, 'getActionName')
+            || !\in_array($eventObj->getActionName(), ['beginEdit', 'save'], true)
+        ) {
+            return;
+        }
+
         // Moderators and admins are never blocked.
         if (WCF::getSession()->getPermission('mod.board.canEditPost')
             || WCF::getSession()->getPermission('admin.general.canUseAcp')

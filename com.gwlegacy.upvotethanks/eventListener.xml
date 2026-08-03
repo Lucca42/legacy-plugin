@@ -17,16 +17,11 @@
 			<environment>user</environment>
 		</eventlistener>
 
-		<!-- Lock the first post against editing (both opening the editor and saving). -->
-		<eventlistener name="lockFirstPostBeginEdit">
+		<!-- Lock the first post against editing. PostAction only fires validateAction;
+		     the listener filters on the beginEdit / save action names. -->
+		<eventlistener name="lockFirstPost">
 			<eventclassname>wbb\data\post\PostAction</eventclassname>
-			<eventname>validateBeginEdit</eventname>
-			<listenerclassname>wcf\system\event\listener\GwLockFirstPostListener</listenerclassname>
-			<environment>user</environment>
-		</eventlistener>
-		<eventlistener name="lockFirstPostSave">
-			<eventclassname>wbb\data\post\PostAction</eventclassname>
-			<eventname>validateSave</eventname>
+			<eventname>validateAction</eventname>
 			<listenerclassname>wcf\system\event\listener\GwLockFirstPostListener</listenerclassname>
 			<environment>user</environment>
 		</eventlistener>

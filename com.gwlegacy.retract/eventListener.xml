@@ -9,16 +9,11 @@
 			<environment>user</environment>
 		</eventlistener>
 
-		<!-- Lock replies against editing (both opening the editor and saving). -->
-		<eventlistener name="lockRepliesBeginEdit">
+		<!-- Lock replies against editing. PostAction only fires validateAction; the
+		     listener filters on the beginEdit / save action names. -->
+		<eventlistener name="lockReplies">
 			<eventclassname>wbb\data\post\PostAction</eventclassname>
-			<eventname>validateBeginEdit</eventname>
-			<listenerclassname>wcf\system\event\listener\GwLockRepliesListener</listenerclassname>
-			<environment>user</environment>
-		</eventlistener>
-		<eventlistener name="lockRepliesSave">
-			<eventclassname>wbb\data\post\PostAction</eventclassname>
-			<eventname>validateSave</eventname>
+			<eventname>validateAction</eventname>
 			<listenerclassname>wcf\system\event\listener\GwLockRepliesListener</listenerclassname>
 			<environment>user</environment>
 		</eventlistener>
