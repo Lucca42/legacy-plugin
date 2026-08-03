@@ -46,7 +46,6 @@ final class RetractAction extends AbstractDatabaseObjectAction
 
         $sql = "SELECT      post.userID,
                             post.threadID,
-                            thread.firstPostID,
                             board.gwRetractEnabled
                 FROM        wbb1_post post
                 INNER JOIN  wbb1_thread thread ON thread.threadID = post.threadID
@@ -62,7 +61,7 @@ final class RetractAction extends AbstractDatabaseObjectAction
         if (!(int)$row['gwRetractEnabled']) {
             throw new PermissionDeniedException();
         }
-        if ((int)$row['firstPostID'] === $postID) {
+        if ($this->getFirstPostID((int)$row['threadID']) === $postID) {
             throw new PermissionDeniedException(); // replies only
         }
         if ((int)$row['userID'] !== $userID) {
@@ -71,6 +70,15 @@ final class RetractAction extends AbstractDatabaseObjectAction
 
         $this->postID = $postID;
         $this->threadID = (int)$row['threadID'];
+    }
+
+    private function getFirstPostID(int $threadID): int
+    {
+        $sql = "SELECT MIN(postID) FROM wbb1_post WHERE threadID = ?";
+        $statement = WCF::getDB()->prepare($sql);
+        $statement->execute([$threadID]);
+
+        return (int)$statement->fetchSingleColumn();
     }
 
     public function retract(): void

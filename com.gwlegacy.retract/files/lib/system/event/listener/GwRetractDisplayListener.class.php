@@ -42,9 +42,22 @@ final class GwRetractDisplayListener implements IParameterizedEventListener
 
         WCF::getTPL()->assign([
             'gwRetractBoardEnabled' => $board && (int)$board->gwRetractEnabled,
-            'gwRetractFirstPostID' => (int)$thread->firstPostID,
+            'gwRetractFirstPostID' => $this->getFirstPostID((int)$thread->threadID),
             'gwRetractGuard' => new RenderGuard(),
             'gwConfirmReplyLock' => $confirmReplyLock,
         ]);
+    }
+
+    /**
+     * The thread's first post is the lowest post id; reliable even on older threads
+     * where the cached firstPostID column is missing.
+     */
+    private function getFirstPostID(int $threadID): int
+    {
+        $sql = "SELECT MIN(postID) FROM wbb1_post WHERE threadID = ?";
+        $statement = WCF::getDB()->prepare($sql);
+        $statement->execute([$threadID]);
+
+        return (int)$statement->fetchSingleColumn();
     }
 }

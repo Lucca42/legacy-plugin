@@ -50,12 +50,25 @@ final class GwUpvoteDisplayListener implements IParameterizedEventListener
 
         WCF::getTPL()->assign([
             'gwUpvoteBoardEnabled' => $enabled,
-            'gwUpvoteFirstPostID' => (int)$thread->firstPostID,
+            'gwUpvoteFirstPostID' => $this->getFirstPostID((int)$thread->threadID),
             'gwUpvoteThreadAuthor' => (int)$thread->userID,
             'gwUpvoteCount' => $counts,
             'gwUpvoteMine' => $mine,
             'gwUpvoteGuard' => new RenderGuard(),
         ]);
+    }
+
+    /**
+     * The thread's first post is the lowest post id; this is reliable even on older
+     * threads where the cached firstPostID column is missing.
+     */
+    private function getFirstPostID(int $threadID): int
+    {
+        $sql = "SELECT MIN(postID) FROM wbb1_post WHERE threadID = ?";
+        $statement = WCF::getDB()->prepare($sql);
+        $statement->execute([$threadID]);
+
+        return (int)$statement->fetchSingleColumn();
     }
 
     /**
