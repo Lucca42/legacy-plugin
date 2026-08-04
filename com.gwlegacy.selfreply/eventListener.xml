@@ -17,6 +17,14 @@
 			<environment>user</environment>
 		</eventlistener>
 
+		<!-- Read fix: mark bumped/squashed threads as read on the last page. -->
+		<eventlistener name="threadReadFix">
+			<eventclassname>wbb\page\ThreadPage</eventclassname>
+			<eventname>readData</eventname>
+			<listenerclassname>wcf\system\event\listener\GwThreadReadFixListener</listenerclassname>
+			<environment>user</environment>
+		</eventlistener>
+
 		<!-- Squash: filter the post list (before count + read) and expose the squash UI. -->
 		<eventlistener name="threadSquashFilter">
 			<eventclassname>wbb\page\ThreadPage</eventclassname>
