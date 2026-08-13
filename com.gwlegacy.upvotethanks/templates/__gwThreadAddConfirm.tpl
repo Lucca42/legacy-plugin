@@ -13,7 +13,8 @@
 				return;
 			}
 			var button = target.closest('button[data-type="save"], .formSubmit input[type="submit"], .formSubmit button[type="submit"]');
-			if (!button || button.closest('article')) {
+			// Skip the inline editor of an existing post (inside a rendered post).
+			if (!button || button.closest('[data-post-id]')) {
 				return;
 			}
 			if (!window.confirm('The first post of this thread will not be editable after posting. Please review it before continuing.')) {

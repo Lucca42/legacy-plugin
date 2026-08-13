@@ -14,7 +14,9 @@
 				return;
 			}
 			var button = target.closest('button[data-type="save"], .formSubmit input[type="submit"], .formSubmit button[type="submit"]');
-			if (!button || button.closest('article')) {
+			// Skip the inline editor of an existing post (which lives inside a rendered
+			// post), but not the quick reply / full reply form.
+			if (!button || button.closest('[data-post-id]')) {
 				return;
 			}
 			if (!window.confirm('Replies on this board cannot be edited after posting. Please reread your message before continuing.')) {
