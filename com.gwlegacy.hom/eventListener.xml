@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/6.0/eventListener.xsd">
+	<import>
+		<!-- Badges of the post authors on a thread page. -->
+		<eventlistener name="homThreadBadges">
+			<eventclassname>wbb\page\ThreadPage</eventclassname>
+			<eventname>assignVariables</eventname>
+			<listenerclassname>wcf\system\event\listener\GwHomThreadBadgeListener</listenerclassname>
+			<environment>user</environment>
+		</eventlistener>
+
+		<!-- Badge among the profile header statistics (PSR-14 style event). -->
+		<eventlistener name="homProfileStat">
+			<eventclassname>wcf\event\user\profile\UserProfileStatItemCollecting</eventclassname>
+			<eventname>:default</eventname>
+			<listenerclassname>wcf\system\event\listener\GwHomProfileStatListener</listenerclassname>
+			<environment>user</environment>
+		</eventlistener>
+	</import>
+
+	<!-- 1.0.0 hooked the profile through UserPage; its listener class is gone. -->
+	<delete>
+		<eventlistener name="homProfileBadge" />
+	</delete>
+</data>

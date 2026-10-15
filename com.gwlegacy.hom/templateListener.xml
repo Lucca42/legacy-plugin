@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/6.0/templateListener.xsd">
+	<import>
+		<!-- Badge in the author sidebar of each post. -->
+		<templatelistener name="homSidebarBadge">
+			<environment>user</environment>
+			<templatename>messageSidebar</templatename>
+			<eventname>userCredits</eventname>
+			<templatecode><![CDATA[{if $gwHomBadges|isset && $gwHomBadges[$userProfile->userID]|isset}{include file='__gwHomSidebarBadge' gwHomBadge=$gwHomBadges[$userProfile->userID]}{/if}]]></templatecode>
+		</templatelistener>
+	</import>
+
+	<!-- 1.0.0 hooked the profile header template; the delete needs the full key. -->
+	<delete>
+		<templatelistener name="homProfileBadge">
+			<environment>user</environment>
+			<templatename>userProfileHeader</templatename>
+			<eventname>afterMeta</eventname>
+		</templatelistener>
+	</delete>
+</data>

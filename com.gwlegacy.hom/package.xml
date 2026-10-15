@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package name="com.gwlegacy.hom" xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/6.0/package.xsd">
+	<packageinformation>
+		<packagename>GWLegacy Hall of Monuments</packagename>
+		<packagename language="fr">GWLegacy · Hall of Monuments</packagename>
+		<packagedescription>Hall of Monuments reward calculator: look up a Guild Wars character, see its monuments, points and Guild Wars 2 rewards, and publish the result as a profile badge.</packagedescription>
+		<version>1.0.2</version>
+		<date>2026-10-15</date>
+	</packageinformation>
+
+	<authorinformation>
+		<author>Calin</author>
+		<authorurl>https://guildwarslegacy.com</authorurl>
+	</authorinformation>
+
+	<requiredpackages>
+		<requiredpackage minversion="6.0.0">com.woltlab.wcf</requiredpackage>
+		<requiredpackage minversion="6.0.0">com.woltlab.wbb</requiredpackage>
+	</requiredpackages>
+
+	<instructions type="install">
+		<instruction type="file" />
+		<instruction type="template" />
+		<instruction type="database">acp/database/install_com.gwlegacy.hom.php</instruction>
+		<instruction type="userGroupOption" />
+		<instruction type="page" />
+		<instruction type="menuItem" />
+		<instruction type="eventListener" />
+		<instruction type="templateListener" />
+	</instructions>
+
+	<instructions type="update" fromversion="1.*">
+		<instruction type="file" />
+		<instruction type="template" />
+		<instruction type="database">acp/database/install_com.gwlegacy.hom.php</instruction>
+		<instruction type="userGroupOption" />
+		<instruction type="page" />
+		<instruction type="menuItem" />
+		<instruction type="eventListener" />
+		<instruction type="templateListener" />
+	</instructions>
+</package>

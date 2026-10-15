@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/6.0/userGroupOption.xsd">
+	<import>
+		<options>
+			<!-- Who can open the Hall of Monuments page. Off for every group except
+			     administrators until the page is opened up. -->
+			<option name="user.gwHom.canView">
+				<categoryname>user.profile</categoryname>
+				<optiontype>boolean</optiontype>
+				<defaultvalue>0</defaultvalue>
+				<admindefaultvalue>1</admindefaultvalue>
+			</option>
+		</options>
+	</import>
+</data>
